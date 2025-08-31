@@ -1,0 +1,9 @@
+# requirements.txt
+
+# with cuda 12.9
+--index-url https://download.pytorch.org/whl/cu129
+
+torchvision
+torch
+
+pybind11

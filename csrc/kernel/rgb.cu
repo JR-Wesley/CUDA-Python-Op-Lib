@@ -1,5 +1,4 @@
-#include <cuda_runtime.h>
-
+#include "./configs.cuh"
 
 __global__ void rgb2gray_kernel ( unsigned char* r, unsigned char* g, unsigned char* b, unsigned char* gray, unsigned int width, unsigned int height) {
 	unsigned int row = blockDim.y * blockIdx.y + threadIdx.y;
@@ -12,9 +11,7 @@ __global__ void rgb2gray_kernel ( unsigned char* r, unsigned char* g, unsigned c
 }
 
 
-int main() {
-// const unsigned int width = 32;
-// const unsigned int height = 32;
-
-}
-
+// int main() {
+//
+// }
+//

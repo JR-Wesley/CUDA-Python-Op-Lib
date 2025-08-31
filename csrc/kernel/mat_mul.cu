@@ -1,8 +1,7 @@
-#include <__clang_cuda_builtin_vars.h>
-#include <cuda_runtime.h>
+#include "./configs.cuh"
 
 // (N, N) * (N, N)
-__global__ void matMulKernel(const float* A, const float* B, float* C, unsigned int N) {
+__global__ void matMulKernel(const float* A, const float* B, float* C, const int N) {
 	int row = blockIdx.y * blockDim.y + threadIdx.y;
 	int col = blockIdx.x * blockDim.x + threadIdx.x;
 

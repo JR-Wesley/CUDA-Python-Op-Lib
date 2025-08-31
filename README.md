@@ -6,7 +6,7 @@
 - ✅ 支持 **发布期 pip 安装**（便于集成）
 - ✅ 支持增加 **自定义算子**
 - ✅ 使用 `LibTorch + PyBind11` 编写 C++ 接口
-- ✅ 使用 `torch.utils.cpp_extension` 替代 CMake，简化构建
+<!-- - ✅ 使用 `torch.utils.cpp_extension` 替代 CMake，简化构建 -->
 - ✅ 包含测试与性能基准脚本
 
 ---
@@ -32,28 +32,29 @@ cuda-ops-template/
 └── README.md                 # 本文件
 ```
 
+### 特点
+
+csrc 现代 C++ 风格 tests
+
+TODO: libtorch + pybind11 封装 Python API
+
+
+### 算子
+
+Elemwise:
+- Add
+Reduce:
+
+Matmul:
+
+
 ---
 
-## ⚙️ 编译与使用方式
+## TODO: ⚙️ 编译与使用方式
 
-本项目支持两种使用模式，分别适用于不同阶段：
+### Make
 
-### 使用 uv 管理 Python 虚拟环境 
-
-```shell
-# 1. 创建虚拟环境（可选，推荐）
-uv venv .venv
-
-# 2. 激活环境
-source .venv/bin/activate  # Linux/macOS
-# 或
-.venv\Scripts\activate     # Windows
-
-# 3. 安装项目（editable 模式，对应 pip install -e .）
-uv install -e .
-```
-
-### 1. 开发模式：即时编译（推荐用于开发调试）
+### 开发模式：即时编译（推荐用于开发调试）
 
 无需安装，修改代码后重新运行自动重新编译。
 
@@ -85,8 +86,6 @@ w = torch.randn(200, 300, device='cuda')
 y = cuda_ops['matmul'].matmul_forward(x, w)
 print(y.shape)  # torch.Size([100, 300])
 ```
-
-> 💡 适用于 Jupyter Notebook、快速迭代、算法验证。
 
 ---
 
@@ -179,40 +178,36 @@ y = cuda_ops.gelu.gelu_forward(x)
 
 ---
 
-## 🛠️ 技术栈说明
-
-- **CUDA Kernel**：使用 `.cu` 文件编写高性能 GPU 代码
-- **C++ 接口**：使用 `LibTorch` 和 `PyBind11` 封装 `torch::Tensor`
-- **构建系统**：`torch.utils.cpp_extension`（无需 CMake）
-  - 自动处理 CUDA 编译、LibTorch 路径、Python 链接
-- **兼容性**：支持 Linux / Windows（WSL）/ macOS（Apple Silicon 需额外配置）
-
----
-
-## 📦 依赖要求
+## Dependencies
 
 - Python >= 3.8
 - PyTorch >= 2.0（需 CUDA 版本匹配）
 - CUDA Toolkit（与 PyTorch 版本对应）
 - `pybind11`（通常由 PyTorch 自动提供）
 
+
+### Environment
+
+It's recommended using `uv` to install dependencies.
+
 ```bash
-pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118
+# 1. 创建环境
+uv venv Path-to-venv
+source Path-to-venv/bin/activate
+
+# 2. 安装依赖
+uv pip install -r requirements.txt
+
+# 3. 安装你的 CUDA 扩展
+uv pip install -e .
+
+# 4. 验证
+python -c "
+import torch
+print('CUDA available:', torch.cuda.is_available())
+print('CUDA version:', torch.version.cuda)
+"
 ```
-
----
-
-## 🌟 为什么不用 CMake？
-
-虽然 CMake 更通用，但对于 **PyTorch CUDA 扩展**，`torch.utils.cpp_extension` 是官方推荐方式，优势包括：
-
-- 自动处理 LibTorch 路径
-- 自动调用 `nvcc`
-- 与 PyTorch 版本完美兼容
-- 支持即时编译（`load()`）
-- 更少的配置文件，更少出错
-
-> 只有在已有大型 C++ 项目时才考虑 CMake。
 
 ---
 
@@ -221,17 +216,4 @@ pip install torch torchvision torchaudio --index-url https://download.pytorch.or
 - PyTorch CUDA Extensions: https://pytorch.org/docs/stable/cpp_extension.html
 - PyBind11: https://pybind11.readthedocs.io/
 - cuBLAS: https://docs.nvidia.com/cuda/cublas/
-
----
-
-## 📮 反馈与贡献
-
-欢迎提交 Issue 或 PR！你可以：
-
-- 添加新的算子模板
-- 支持 Autograd 反向传播
-- 添加 CI/CD 自动测试
-- 支持 `torch.compile`
-
----
 
