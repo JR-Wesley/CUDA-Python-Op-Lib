@@ -3,6 +3,8 @@
  // dim3 grid_size(CIEL(N, BLOCK_SIZE));
  // reduce_v1<<<grid_size, block_size>>>(d_x, d_y, N);
 
+namespace Kernel {
+
 namespace Reduce {
 
 __global__ void sum_naive(const float* input, float* output, int N) {
@@ -59,5 +61,9 @@ __global__ void sum_naive(const float* input, float* output, int N) {
 //      }
 //  }
 
+void softmax() {
+
 }
 
+}
+}
